@@ -7,7 +7,6 @@ from aussieaddonscommon import utils
 
 import resources.lib.classes as classes
 import resources.lib.comm as comm
-from resources.lib.upnext import upnext_signal
 
 import xbmc
 
@@ -76,6 +75,12 @@ def play(url):
 
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem=listitem)
 
+        try:
+            import upnext
+        except Exception as e:
+            utils.log('UpNext addon not installed')
+            return
+
         np = comm.get_next_program(p)
         if not isinstance(np, classes.Program):
             return
@@ -119,7 +124,7 @@ def play(url):
             notification_offset=p.get_credits_time()
         )
 
-        upnext_signal('plugin.video.sbs', next_info)
+        upnext.send_signal(xbmcaddon.Addon().getAddonInfo('id'), next_info)
 
     except Exception:
         utils.handle_error("Unable to play video")
