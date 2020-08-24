@@ -78,7 +78,7 @@ def play(url):
         try:
             import upnext
         except Exception as e:
-            utils.log('UpNext addon not installed')
+            utils.log('UpNext addon not installed: %s' % e)
             return
 
         np = comm.get_next_program(p)
